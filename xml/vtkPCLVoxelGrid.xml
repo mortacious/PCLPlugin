@@ -22,14 +22,31 @@
         </Documentation>
       </InputProperty>
 
-      <DoubleVectorProperty
-      name="LeafSize"
-      command="SetLeafSize"
-      number_of_elements="3"
-      default_values="0.01 0.01 0.01">
-      <DoubleRangeDomain name="range" min="0"/>
-      </DoubleVectorProperty>
+        <DoubleVectorProperty name="LeafSize"
+                              command="SetLeafSize"
+                              number_of_elements="3"
+                              default_values="0.01 0.01 0.01">
+            <DoubleRangeDomain name="range"
+                               min="0"/>
+            <Hints>
+                <ShowComponentLabels>
+                    <Label component="0" label="x:"/>
+                    <Label component="1" label="y:"/>
+                    <Label component="2" label="z:"/>
+                </ShowComponentLabels>
+            </Hints>
+        </DoubleVectorProperty>
+        <IntVectorProperty name="MinimumPointsNumberPerVoxel"
+                           command="SetMinimumPointsNumberPerVoxel"
+                           number_of_elements="1"
+                           default_values="1"
+                           panel_visibility="advanced">
+            <IntRangeDomain name="range" min="1"/>
+        </IntVectorProperty>
 
+      <Hints>
+          <ShowInMenu category="PCL" />
+      </Hints>
    </SourceProxy>
   </ProxyGroup>
 </ServerManagerConfiguration>

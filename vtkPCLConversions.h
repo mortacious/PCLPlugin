@@ -39,44 +39,54 @@ class vtkIntArray;
 class VTKPCLFILTERS_EXPORT vtkPCLConversions : public vtkObject
 {
 public:
-        
-  static vtkPCLConversions* New();
-     
-  vtkTypeMacro(vtkPCLConversions, vtkObject);
+    static vtkPCLConversions* New();
 
-  void PrintSelf(ostream& os, vtkIndent indent);
+    vtkTypeMacro(vtkPCLConversions, vtkObject);
 
-  static vtkSmartPointer<vtkPolyData> PolyDataFromPCDFile(const std::string& filename);
+    void PrintSelf(ostream& os, vtkIndent indent);
 
-  static vtkSmartPointer<vtkPolyData> PolyDataFromPointCloud(
-    pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud);
+    static vtkSmartPointer<vtkPolyData> PolyDataFromPCDFile(const std::string& filename, bool addCoordsToPointData=true);
 
-  static vtkSmartPointer<vtkPolyData> PolyDataFromPointCloud(
-    pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr cloud);
+    static void PolyDataToPCDFile(vtkPolyData *polyData, const std::string &filename, bool write_binary);
 
-  static vtkSmartPointer<vtkPolyData> PolyDataFromPointCloud(
-    pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr cloud);
+    static vtkSmartPointer<vtkPolyData> PolyDataFromPointCloudXYZ(
+            pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud);
 
-  static pcl::PointCloud<pcl::PointXYZ>::Ptr PointCloudFromPolyData(
-    vtkPolyData* polyData);
+    static vtkSmartPointer<vtkPolyData> PolyDataFromPointCloudXYZRGB(
+            pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr cloud);
 
-  static vtkSmartPointer<vtkCellArray> NewVertexCells(vtkIdType numberOfVerts);
+    static vtkSmartPointer<vtkPolyData> PolyDataFromPointCloudXYZRGBA(
+            pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr cloud);
 
-  static vtkSmartPointer<vtkIntArray> NewLabelsArray(pcl::IndicesConstPtr indices, vtkIdType length);
-  static vtkSmartPointer<vtkIntArray> NewLabelsArray(pcl::PointIndices::ConstPtr indices, vtkIdType length);
-  static vtkSmartPointer<vtkIntArray> NewLabelsArray(const std::vector<pcl::PointIndices>& indices, vtkIdType length);
+    static vtkSmartPointer<vtkPolyData> PolyDataFromGenericPointCloud(
+            pcl::PCLPointCloud2ConstPtr cloud, bool reverse=false, bool addCoordsToPointData=true);
 
-  static void PerformPointCloudConversionBenchmark(vtkPolyData* polyData);
+    static pcl::PointCloud<pcl::PointXYZ>::Ptr PolyDataToPointCloudXYZ(
+            vtkPolyData *polyData);
+
+    static pcl::PointCloud<pcl::PointXYZRGB>::Ptr PolyDataToPointCloudXYZRGB(
+            vtkPolyData *polyData);
+
+
+    static pcl::PCLPointCloud2Ptr PolyDataToGenericPointCloud(vtkPolyData *polyData);
+
+    static vtkSmartPointer<vtkCellArray> NewVertexCells(vtkIdType numberOfVerts);
+
+    static vtkSmartPointer<vtkIntArray> NewLabelsArray(pcl::IndicesConstPtr indices, vtkIdType length);
+    static vtkSmartPointer<vtkIntArray> NewLabelsArray(pcl::PointIndices::ConstPtr indices, vtkIdType length);
+    static vtkSmartPointer<vtkIntArray> NewLabelsArray(const std::vector<pcl::PointIndices>& indices, vtkIdType length);
+
+    static void PerformPointCloudConversionBenchmark(vtkPolyData* polyData);
 
 protected:
 
-  vtkPCLConversions();
-  ~vtkPCLConversions();
+    vtkPCLConversions();
+    ~vtkPCLConversions();
 
 private:
 
-  vtkPCLConversions(const vtkPCLConversions&); // Not implemented
-  void operator=(const vtkPCLConversions&); // Not implemented
+    vtkPCLConversions(const vtkPCLConversions&); // Not implemented
+    void operator=(const vtkPCLConversions&); // Not implemented
 };
 
 #endif

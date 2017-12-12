@@ -1,13 +1,23 @@
+project(Paraview_PCLPlugins)
 if(NOT ParaView_SOURCE_DIR)
-  cmake_minimum_required(VERSION 2.8)
-  set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
-  find_package(ParaView REQUIRED)
-  include(${PARAVIEW_USE_FILE})
-  find_package(PythonLibs REQUIRED)
+cmake_minimum_required(VERSION 3.0)
+set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
+find_package(ParaView REQUIRED)
+include(${PARAVIEW_USE_FILE})
+find_package(PythonLibs REQUIRED)
 endif()
+set(CMAKE_CXX_STANDARD 14)
+option(USE_EXTERNAL_PCL "Use external system wide PCL version")
+
+#if(NOT USE_EXTERNAL_PCL)
+    #set(VTK_DIR /usr/lib/cmake/paraview-5.4)
+    #set(ParaView_CMAKE_DIR /usr/lib/cmake/paraview-5.4)
+    #set(PCL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/pcl/build)
+    #endif()
+    
 
 find_package(PCL REQUIRED)
-
+find_package(VTK REQUIRED)
 include_directories(${VTK_INCLUDE_DIRS})
 include_directories(${VTK_PYTHON_INCLUDE_DIR})
 include_directories(${PCL_INCLUDE_DIRS})
@@ -29,7 +39,7 @@ set(server_deps)
 option(USE_OPENNI "Build OpenNI features" OFF)
 
 if(PARAVIEW_BUILD_QT_GUI AND USE_OPENNI)
-  QT4_WRAP_CPP(moc_srcs pqPCLOpenNISource.h)
+  QT5_WRAP_CPP(moc_srcs pqPCLOpenNISource.h)
   ADD_PARAVIEW_OBJECT_PANEL(
     ifaces iface_srcs
     CLASS_NAME pqPCLOpenNISource
@@ -41,52 +51,57 @@ endif()
 
 
 list(APPEND servermanager_sources
-  vtkAnnotateOBBs.cxx
+#vtkAnnotateOBBs.cxx
+    vtkPCLConversions.h
   vtkPCLConversions.cxx
-  vtkPCLEuclideanClusterExtraction.cxx
-  vtkPCLNDTRegistration.cxx
-  vtkPCLNormalEstimation.cxx
-  vtkPCLRadiusOutlierRemoval.cxx
+#  vtkPCLEuclideanClusterExtraction.cxx
+#  vtkPCLNDTRegistration.cxx
+#  vtkPCLNormalEstimation.cxx
+#  vtkPCLRadiusOutlierRemoval.cxx
+    vtkPCDReader.h
   vtkPCDReader.cxx
-  vtkPCLSACSegmentationCylinder.cxx
-  vtkPCLSACSegmentationPlane.cxx
+    vtkPCDWriter.h
+    vtkPCDWriter.cpp
+  #  vtkPCLSACSegmentationCylinder.cxx
+  #vtkPCLSACSegmentationPlane.cxx
   vtkPCLVoxelGrid.cxx
   )
 
-if(USE_OPENNI)
-list(APPEND servermanager_sources
-  vtkPCLOpenNISource.cxx
-  )
-endif()
+#if(USE_OPENNI)
+#list(APPEND servermanager_sources
+#  vtkPCLOpenNISource.cxx
+#  )
+#endif()
 
 list(APPEND servermanager_xml
-  xml/vtkAnnotateOBBs.xml
-  xml/vtkPCLEuclideanClusterExtraction.xml
-  xml/vtkPCLNDTRegistration.xml
-  xml/vtkPCLNormalEstimation.xml
-  xml/vtkPCLRadiusOutlierRemoval.xml
+    # xml/vtkAnnotateOBBs.xml
+    #xml/vtkPCLEuclideanClusterExtraction.xml
+    #xml/vtkPCLNDTRegistration.xml
+    #xml/vtkPCLNormalEstimation.xml
+    #xml/vtkPCLRadiusOutlierRemoval.xml
   xml/vtkPCDReader.xml
-  xml/vtkPCLSACSegmentationCylinder.xml
-  xml/vtkPCLSACSegmentationPlane.xml
+  #xml/vtkPCLSACSegmentationCylinder.xml
+  # xml/vtkPCLSACSegmentationPlane.xml
   xml/vtkPCLVoxelGrid.xml
-  xml/vtkThresholdPoints.xml
+    xml/vtkPCDWriter.xml
+  #xml/vtkThresholdPoints.xml
   )
 
-if(USE_OPENNI)
-list(APPEND servermanager_xml
-  xml/vtkPCLOpenNISource.xml
-  )
-endif()
+#if(USE_OPENNI)
+#list(APPEND servermanager_xml
+#  xml/vtkPCLOpenNISource.xml
+#  )
+#endif()
 
-list(APPEND gui_xml
-  xml/PCLFiltersGUI.xml
-  )
+#list(APPEND gui_xml
+#  xml/PCLFiltersGUI.xml
+#  )
 
-if(USE_OPENNI)
-list(APPEND gui_xml
-  xml/PCLSourcesGUI.xml
-  )
-endif()
+#if(USE_OPENNI)
+#list(APPEND gui_xml
+#  xml/PCLSourcesGUI.xml
+#  )
+#endif()
 
 list(APPEND server_deps
   ${VTK_LIBRARIES}
@@ -97,9 +112,6 @@ set(library_name vtkPCLFilters)
 include(GenerateExportHeader)
 
 add_paraview_plugin(${library_name} "1.0"
-  GUI_INTERFACES ${gui_interfaces}
-  GUI_RESOURCE_FILES ${gui_xml}
-  GUI_SOURCES ${gui_sources}
   SERVER_MANAGER_XML ${servermanager_xml}
   SERVER_MANAGER_SOURCES ${servermanager_sources}
   )

@@ -21,33 +21,39 @@
 
 #include <vtkPolyDataAlgorithm.h>
 #include <vtkPCLFiltersModule.h>
+#include <string>
 
 class VTKPCLFILTERS_EXPORT vtkPCDReader : public vtkPolyDataAlgorithm
 {
 public:
-  vtkTypeMacro(vtkPCDReader, vtkPolyDataAlgorithm);
-  void PrintSelf(ostream& os, vtkIndent indent);
+    vtkTypeMacro(vtkPCDReader, vtkPolyDataAlgorithm);
+    void PrintSelf(ostream& os, vtkIndent indent);
 
-  static vtkPCDReader *New();
+    static vtkPCDReader *New();
 
-  vtkSetStringMacro(FileName);
-  vtkGetStringMacro(FileName);
+    vtkSetMacro(FileName, std::string);
+    vtkGetMacro(FileName, std::string);
+
+    vtkSetMacro(AddCoordsToPointData, int);
+    vtkGetMacro(AddCoordsToPointData, int);
+
 
 protected:
 
-  char* FileName;
+    std::string FileName;
+    int AddCoordsToPointData;
 
-  virtual int RequestData(vtkInformation *request,
-                          vtkInformationVector **inputVector,
-                          vtkInformationVector *outputVector);
+    virtual int RequestData(vtkInformation *request,
+                            vtkInformationVector **inputVector,
+                            vtkInformationVector *outputVector);
 
 
-  vtkPCDReader();
-  virtual ~vtkPCDReader();
+    vtkPCDReader();
+    virtual ~vtkPCDReader();
 
 private:
-  vtkPCDReader(const vtkPCDReader&);  // Not implemented.
-  void operator=(const vtkPCDReader&);  // Not implemented.
+    vtkPCDReader(const vtkPCDReader&);  // Not implemented.
+    void operator=(const vtkPCDReader&);  // Not implemented.
 };
 
 #endif

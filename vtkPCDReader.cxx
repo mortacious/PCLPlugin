@@ -28,9 +28,8 @@
 vtkStandardNewMacro(vtkPCDReader);
 
 //----------------------------------------------------------------------------
-vtkPCDReader::vtkPCDReader()
+vtkPCDReader::vtkPCDReader(): AddCoordsToPointData(true)
 {
-  this->FileName = 0;
   this->SetNumberOfInputPorts(0);
   this->SetNumberOfOutputPorts(1);
 }
@@ -38,7 +37,6 @@ vtkPCDReader::vtkPCDReader()
 //----------------------------------------------------------------------------
 vtkPCDReader::~vtkPCDReader()
 {
-  this->SetFileName(NULL);
 }
 
 //----------------------------------------------------------------------------
@@ -47,24 +45,23 @@ int vtkPCDReader::RequestData(
   vtkInformationVector **inputVector,
   vtkInformationVector *outputVector)
 {
-  vtkInformation *outInfo = outputVector->GetInformationObject(0);
-  vtkDataSet *output = vtkDataSet::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
+    vtkInformation *outInfo = outputVector->GetInformationObject(0);
+    vtkDataSet *output = vtkDataSet::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-  if (!this->GetFileName())
+    if (GetFileName().size() == 0)
     {
-    vtkErrorMacro("Filename is not set");
-    return 0;
+        vtkErrorMacro("Filename is not set");
+        return 0;
     }
 
-  vtkSmartPointer<vtkPolyData> polyData = vtkPCLConversions::PolyDataFromPCDFile(this->GetFileName());
-
-  if (!polyData)
+    vtkSmartPointer<vtkPolyData> polyData = vtkPCLConversions::PolyDataFromPCDFile(this->GetFileName(), this->GetAddCoordsToPointData());
+    if (!polyData)
     {
-    vtkErrorMacro("Failed to read pcd file: " << this->GetFileName());
+        vtkErrorMacro("Failed to read pcd file: " << this->GetFileName());
     }
 
-  output->ShallowCopy(polyData);
-  return 1;
+    output->ShallowCopy(polyData);
+    return 1;
 }
 
 //----------------------------------------------------------------------------

@@ -25,29 +25,31 @@
 class VTKPCLFILTERS_EXPORT vtkPCLVoxelGrid : public vtkPolyDataAlgorithm
 {
 public:
-  vtkTypeMacro(vtkPCLVoxelGrid, vtkPolyDataAlgorithm);
-  void PrintSelf(ostream& os, vtkIndent indent);
+    vtkTypeMacro(vtkPCLVoxelGrid, vtkPolyDataAlgorithm);
+    void PrintSelf(ostream& os, vtkIndent indent);
 
-  static vtkPCLVoxelGrid *New();
+    static vtkPCLVoxelGrid *New();
 
-  vtkSetVector3Macro(LeafSize, double);
-  vtkGetVector3Macro(LeafSize, double);
-
+    vtkSetVector3Macro(LeafSize, double);
+    vtkGetVector3Macro(LeafSize, double);
+    vtkSetMacro(MinimumPointsNumberPerVoxel, unsigned int);
+    vtkGetMacro(MinimumPointsNumberPerVoxel, unsigned int);
 protected:
 
-  double LeafSize[3];
+    double LeafSize[3];
+    unsigned int MinimumPointsNumberPerVoxel;
 
-  virtual int RequestData(vtkInformation *request,
-                          vtkInformationVector **inputVector,
-                          vtkInformationVector *outputVector);
+    virtual int RequestData(vtkInformation *request,
+                            vtkInformationVector **inputVector,
+                            vtkInformationVector *outputVector);
 
 
-  vtkPCLVoxelGrid();
-  virtual ~vtkPCLVoxelGrid();
+    vtkPCLVoxelGrid();
+    virtual ~vtkPCLVoxelGrid();
 
 private:
-  vtkPCLVoxelGrid(const vtkPCLVoxelGrid&);  // Not implemented.
-  void operator=(const vtkPCLVoxelGrid&);  // Not implemented.
+    vtkPCLVoxelGrid(const vtkPCLVoxelGrid&);  // Not implemented.
+    void operator=(const vtkPCLVoxelGrid&);  // Not implemented.
 };
 
 #endif
