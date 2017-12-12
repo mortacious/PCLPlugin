@@ -1,0 +1,16 @@
+//
+// Created by figelbrink on 12/11/17.
+//
+
+#ifndef PARAVIEW_PCLPLUGINS_VTKPCDWRITER_H
+#define PARAVIEW_PCLPLUGINS_VTKPCDWRITER_H
+
+
+
+class vtkPCDWriter {
+
+};
+
+
+
+#endif //PARAVIEW_PCLPLUGINS_VTKPCDWRITER_H

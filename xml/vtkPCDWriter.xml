@@ -1,0 +1,30 @@
+<ServerManagerConfiguration>
+    <ProxyGroup name="writers">
+        <SourceProxy name="PCDWriter" class="vtkPCDWriter" label="PCDWriter">
+            <Documentation
+                    short_help="Write pointcloud library (*.pcd) files."
+                    long_help="Write pointcloud library (*.pcd) files.">
+            </Documentation>
+            <StringVectorProperty
+                    name="FileName"
+                    animateable="0"
+                    command="SetFileName"
+                    number_of_elements="1">
+                <FileListDomain name="files"/>
+                <Documentation>
+                    This property specifies the pcd file to read.
+                </Documentation>
+            </StringVectorProperty>
+
+            <IntVectorProperty name="Binary"
+                               command="SetWriteBinary"
+                               number_of_elements="1"
+                               default_values="0">
+                <BooleanDomain name="bool"/>
+            </IntVectorProperty>
+            <Hints>
+                <WriterFactory extensions="pcd" file_description="Pointcloud Library Files"/>
+            </Hints>
+        </SourceProxy>
+    </ProxyGroup>
+</ServerManagerConfiguration>
