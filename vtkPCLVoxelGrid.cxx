@@ -16,6 +16,7 @@
 #include "vtkPCLConversions.h"
 
 #include "vtkPolyData.h"
+#include "vtkPointSet.h"
 #include "vtkInformation.h"
 #include "vtkInformationVector.h"
 #include "vtkObjectFactory.h"
@@ -23,6 +24,7 @@
 #include "vtkSmartPointer.h"
 #include "vtkNew.h"
 #include "vtkAlgorithmOutput.h"
+#include "vtkGeometryFilter.h"
 #include <vtkPointData.h>
 
 #include <pcl/filters/voxel_grid.h>
@@ -74,15 +76,13 @@ int vtkPCLVoxelGrid::RequestData(
   vtkInformationVector *outputVector)
 {
     vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
-    vtkPolyData *input = vtkPolyData::SafeDownCast(inInfo->Get(vtkDataObject::DATA_OBJECT()));
+    vtkPointSet *input = vtkPointSet::SafeDownCast(inInfo->Get(vtkDataObject::DATA_OBJECT()));
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
     vtkPolyData *output = vtkPolyData::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-
-    pcl::PCLPointCloud2Ptr cloud = vtkPCLConversions::PolyDataToGenericPointCloud(input);
+    pcl::PCLPointCloud2Ptr cloud = vtkPCLConversions::PointSetToGenericPointCloud(input);
     pcl::PCLPointCloud2Ptr cloudFiltered = ApplyVoxelGrid(cloud, this->LeafSize, MinimumPointsNumberPerVoxel);
     output->ShallowCopy(vtkPCLConversions::PolyDataFromGenericPointCloud(cloudFiltered));
-
     return 1;
 }
 
@@ -90,4 +90,12 @@ int vtkPCLVoxelGrid::RequestData(
 void vtkPCLVoxelGrid::PrintSelf(ostream& os, vtkIndent indent)
 {
     this->Superclass::PrintSelf(os,indent);
+}
+
+int vtkPCLVoxelGrid::FillInputPortInformation(int port, vtkInformation *info) {
+    if(!this->Superclass::FillInputPortInformation(port, info)) {
+        return 0;
+    }
+    info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkPointSet");
+    return 1;
 }

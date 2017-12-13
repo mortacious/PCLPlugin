@@ -28,26 +28,25 @@
 //----------------------------------------------------------------------------
 namespace {
 
-void ApplyEuclideanClusterExtraction(
-                      pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud,
-                      double clusterTolerance, double minClusterSize, double maxClusterSize,
-                      std::vector<pcl::PointIndices>& clusterIndices)
-{
-  if (!cloud || !cloud->points.size())
-    {
-    return;
-    }
+    void ApplyEuclideanClusterExtraction(
+            pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud,
+            double clusterTolerance, double minClusterSize, double maxClusterSize,
+            std::vector<pcl::PointIndices> &clusterIndices) {
+        if (!cloud || !cloud->points.size()) {
+            return;
+        }
 
-  pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
-  tree->setInputCloud(cloud);
-  pcl::EuclideanClusterExtraction<pcl::PointXYZ> clusterFilter;
-  clusterFilter.setClusterTolerance(clusterTolerance);
-  clusterFilter.setMinClusterSize(minClusterSize);
-  clusterFilter.setMaxClusterSize(maxClusterSize);
-  clusterFilter.setSearchMethod(tree);
-  clusterFilter.setInputCloud(cloud);
-  clusterFilter.extract(clusterIndices);
-}
+
+        pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
+        tree->setInputCloud(cloud);
+        pcl::EuclideanClusterExtraction<pcl::PointXYZ> clusterFilter;
+        clusterFilter.setClusterTolerance(clusterTolerance);
+        clusterFilter.setMinClusterSize(minClusterSize);
+        clusterFilter.setMaxClusterSize(maxClusterSize);
+        clusterFilter.setSearchMethod(tree);
+        clusterFilter.setInputCloud(cloud);
+        clusterFilter.extract(clusterIndices);
+    }
 
 }
 
@@ -55,48 +54,45 @@ void ApplyEuclideanClusterExtraction(
 vtkStandardNewMacro(vtkPCLEuclideanClusterExtraction);
 
 //----------------------------------------------------------------------------
-vtkPCLEuclideanClusterExtraction::vtkPCLEuclideanClusterExtraction()
-{
-  this->ClusterTolerance = 0.05;
-  this->MinClusterSize = 100;
-  this->MaxClusterSize = 100000;
-  this->SetNumberOfInputPorts(1);
-  this->SetNumberOfOutputPorts(1);
+vtkPCLEuclideanClusterExtraction::vtkPCLEuclideanClusterExtraction() {
+    this->ClusterTolerance = 0.05;
+    this->MinClusterSize = 100;
+    this->MaxClusterSize = 100000;
+    this->SetNumberOfInputPorts(1);
+    this->SetNumberOfOutputPorts(1);
 }
 
 //----------------------------------------------------------------------------
-vtkPCLEuclideanClusterExtraction::~vtkPCLEuclideanClusterExtraction()
-{
+vtkPCLEuclideanClusterExtraction::~vtkPCLEuclideanClusterExtraction() {
 }
 
 //----------------------------------------------------------------------------
 int vtkPCLEuclideanClusterExtraction::RequestData(
-  vtkInformation* vtkNotUsed(request),
-  vtkInformationVector **inputVector,
-  vtkInformationVector *outputVector)
-{
-  // get input and output data objects
-  vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
-  vtkPolyData *input = vtkPolyData::SafeDownCast(inInfo->Get(vtkDataObject::DATA_OBJECT()));
-  vtkInformation *outInfo = outputVector->GetInformationObject(0);
-  vtkPolyData *output = vtkPolyData::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
+        vtkInformation * vtkNotUsed(request),
+        vtkInformationVector **inputVector,
+        vtkInformationVector *outputVector) {
+    // get input and output data objects
+    vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
+    vtkPointSet *input = vtkPointSet::SafeDownCast(inInfo->Get(vtkDataObject::DATA_OBJECT()));
+    vtkInformation *outInfo = outputVector->GetInformationObject(0);
+    vtkPointSet *output = vtkPointSet::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-  // perform euclidean cluster extraction
-  std::vector<pcl::PointIndices> clusterIndices;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = vtkPCLConversions::PointCloudFromPolyData(input);
-  ApplyEuclideanClusterExtraction(cloud, this->ClusterTolerance, this->MinClusterSize, this->MaxClusterSize, clusterIndices);
+    // perform euclidean cluster extraction
+    std::vector<pcl::PointIndices> clusterIndices;
+    clusterIndices.reserve(input->GetNumberOfPoints()); // prealloc
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = vtkPCLConversions::PointSetToPointCloudXYZ(input);
+    ApplyEuclideanClusterExtraction(cloud, this->ClusterTolerance, this->MinClusterSize, this->MaxClusterSize,
+                                    clusterIndices);
 
-  // pass thru input add labels
-  vtkSmartPointer<vtkIntArray> labels = vtkPCLConversions::NewLabelsArray(clusterIndices, input->GetNumberOfPoints());
-  labels->SetName("cluster_labels");
-  output->ShallowCopy(input);
-  output->GetPointData()->AddArray(labels);
-
-  return 1;
+    // pass thru input add labels
+    vtkSmartPointer<vtkIntArray> labels = vtkPCLConversions::NewLabelsArray(clusterIndices, input->GetNumberOfPoints());
+    labels->SetName("cluster_labels");
+    output->ShallowCopy(input);
+    output->GetPointData()->AddArray(labels);
+    return 1;
 }
 
 //----------------------------------------------------------------------------
-void vtkPCLEuclideanClusterExtraction::PrintSelf(ostream& os, vtkIndent indent)
-{
-  this->Superclass::PrintSelf(os,indent);
+void vtkPCLEuclideanClusterExtraction::PrintSelf(ostream &os, vtkIndent indent) {
+    this->Superclass::PrintSelf(os, indent);
 }

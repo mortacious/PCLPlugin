@@ -1,29 +1,29 @@
 <ServerManagerConfiguration>
-  <ProxyGroup name="sources">
-    <SourceProxy name="PCDReader" class="vtkPCDReader" label="PCD Reader">
-      <Documentation
-         short_help="Read pointcloud library (*.pcd) files."
-         long_help="Read pointcloud library (*.pcd) files.">
-      </Documentation>
-      <StringVectorProperty
-          name="FileName"
-          animateable="0"
-          command="SetFileName"
-          number_of_elements="1">
-          <FileListDomain name="files"/>
-          <Documentation>
-            This property specifies the pcd file to read.
-          </Documentation>
-      </StringVectorProperty>
-        <IntVectorProperty name="IncludeCoordinatesasPointData"
-                           command="SetAddCoordsToPointData"
-                           number_of_elements="1"
-                           default_values="1">
-            <BooleanDomain name="bool"/>
-        </IntVectorProperty>
-       <Hints>
-        <ReaderFactory extensions="pcd" file_description="Pointcloud Library Files"/>
-       </Hints>
-   </SourceProxy>
-  </ProxyGroup>
+    <ProxyGroup name="sources">
+        <SourceProxy name="PCDReader" class="vtkPCDReader" label="PCD Reader">
+            <Documentation
+                    short_help="Read pointcloud library (*.pcd) files."
+                    long_help="Read pointcloud library (*.pcd) files.">
+            </Documentation>
+            <StringVectorProperty
+                    name="FileName"
+                    animateable="0"
+                    command="SetFileName"
+                    number_of_elements="1">
+                <FileListDomain name="files"/>
+                <Documentation>
+                    This property specifies the pcd file to read.
+                </Documentation>
+            </StringVectorProperty>
+            <IntVectorProperty name="IncludeCoordinatesasPointData"
+                               command="SetAddCoordsToPointData"
+                               number_of_elements="1"
+                               default_values="1">
+                <BooleanDomain name="bool"/>
+            </IntVectorProperty>
+            <Hints>
+                <ReaderFactory extensions="pcd" file_description="Pointcloud Library Files"/>
+            </Hints>
+        </SourceProxy>
+    </ProxyGroup>
 </ServerManagerConfiguration>

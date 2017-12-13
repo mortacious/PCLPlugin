@@ -43,6 +43,8 @@ protected:
                             vtkInformationVector **inputVector,
                             vtkInformationVector *outputVector);
 
+    virtual int FillInputPortInformation(int port,
+                                         vtkInformation* info);
 
     vtkPCLVoxelGrid();
     virtual ~vtkPCLVoxelGrid();

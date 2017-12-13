@@ -35,6 +35,7 @@
 class vtkPolyData;
 class vtkCellArray;
 class vtkIntArray;
+class vtkPointSet;
 
 class VTKPCLFILTERS_EXPORT vtkPCLConversions : public vtkObject
 {
@@ -61,14 +62,14 @@ public:
     static vtkSmartPointer<vtkPolyData> PolyDataFromGenericPointCloud(
             pcl::PCLPointCloud2ConstPtr cloud, bool reverse=false, bool addCoordsToPointData=true);
 
-    static pcl::PointCloud<pcl::PointXYZ>::Ptr PolyDataToPointCloudXYZ(
-            vtkPolyData *polyData);
+    static pcl::PointCloud<pcl::PointXYZ>::Ptr PointSetToPointCloudXYZ(
+            vtkPointSet *polyData);
 
-    static pcl::PointCloud<pcl::PointXYZRGB>::Ptr PolyDataToPointCloudXYZRGB(
-            vtkPolyData *polyData);
+    static pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointSetToPointCloudXYZRGB(
+            vtkPointSet *polyData);
 
 
-    static pcl::PCLPointCloud2Ptr PolyDataToGenericPointCloud(vtkPolyData *polyData);
+    static pcl::PCLPointCloud2Ptr PointSetToGenericPointCloud(vtkPointSet *polyData);
 
     static vtkSmartPointer<vtkCellArray> NewVertexCells(vtkIdType numberOfVerts);
 

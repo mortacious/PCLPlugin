@@ -15,18 +15,18 @@
 // .NAME vtkPCLEuclideanClusterExtraction -
 // .SECTION Description
 //
-
+#pragma once
 #ifndef __vtkPCLEuclideanClusterExtraction_h
 #define __vtkPCLEuclideanClusterExtraction_h
 
-#include <vtkPolyDataAlgorithm.h>
+#include <vtkPointSetAlgorithm.h>
 #include <vtkPCLFiltersModule.h>
 
 
-class VTKPCLFILTERS_EXPORT vtkPCLEuclideanClusterExtraction : public vtkPolyDataAlgorithm
+class VTKPCLFILTERS_EXPORT vtkPCLEuclideanClusterExtraction : public vtkPointSetAlgorithm
 {
 public:
-  vtkTypeMacro(vtkPCLEuclideanClusterExtraction, vtkPolyDataAlgorithm);
+  vtkTypeMacro(vtkPCLEuclideanClusterExtraction, vtkPointSetAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static vtkPCLEuclideanClusterExtraction *New();

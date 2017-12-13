@@ -18,35 +18,41 @@
 
 #ifndef __vtkAnnotateOBBs_h
 #define __vtkAnnotateOBBs_h
+
 #include <vtkPCLFiltersModule.h>
 #include <vtkPolyDataAlgorithm.h>
 
 
-class VTKPCLFILTERS_EXPORT vtkAnnotateOBBs : public vtkPolyDataAlgorithm
-{
+class VTKPCLFILTERS_EXPORT vtkAnnotateOBBs : public vtkPolyDataAlgorithm {
 public:
-  vtkTypeMacro(vtkAnnotateOBBs, vtkPolyDataAlgorithm);
-  void PrintSelf(ostream& os, vtkIndent indent);
+vtkTypeMacro(vtkAnnotateOBBs, vtkPolyDataAlgorithm);
 
-  static vtkAnnotateOBBs *New();
+    void PrintSelf(ostream &os, vtkIndent indent);
 
-  vtkGetMacro(AnnotateLabelZero, bool);
-  vtkSetMacro(AnnotateLabelZero, bool);
+    static vtkAnnotateOBBs *New();
+
+    vtkGetMacro(AnnotateLabelZero, bool);
+
+    vtkSetMacro(AnnotateLabelZero, bool);
 
 protected:
 
-  virtual int RequestData(vtkInformation *request,
-                          vtkInformationVector **inputVector,
-                          vtkInformationVector *outputVector);
+    virtual int RequestData(vtkInformation *request,
+                            vtkInformationVector **inputVector,
+                            vtkInformationVector *outputVector);
 
-  vtkAnnotateOBBs();
-  virtual ~vtkAnnotateOBBs();
+    vtkAnnotateOBBs();
 
-  bool AnnotateLabelZero;
+    virtual ~vtkAnnotateOBBs();
+
+    virtual int FillInputPortInformation(int port,
+                                         vtkInformation *info);
+
+    bool AnnotateLabelZero;
 
 private:
-  vtkAnnotateOBBs(const vtkAnnotateOBBs&);  // Not implemented.
-  void operator=(const vtkAnnotateOBBs&);  // Not implemented.
+    vtkAnnotateOBBs(const vtkAnnotateOBBs &);  // Not implemented.
+    void operator=(const vtkAnnotateOBBs &);  // Not implemented.
 };
 
 #endif

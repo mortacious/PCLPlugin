@@ -19,13 +19,13 @@
 #ifndef __vtkPCLSACSegmentationPlane_h
 #define __vtkPCLSACSegmentationPlane_h
 
-#include <vtkPolyDataAlgorithm.h>
+#include <vtkPointSetAlgorithm.h>
 #include <vtkPCLFiltersModule.h>
 
-class VTKPCLFILTERS_EXPORT vtkPCLSACSegmentationPlane : public vtkPolyDataAlgorithm
+class VTKPCLFILTERS_EXPORT vtkPCLSACSegmentationPlane : public vtkPointSetAlgorithm
 {
 public:
-  vtkTypeMacro(vtkPCLSACSegmentationPlane, vtkPolyDataAlgorithm);
+  vtkTypeMacro(vtkPCLSACSegmentationPlane, vtkPointSetAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static vtkPCLSACSegmentationPlane *New();

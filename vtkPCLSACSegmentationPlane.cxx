@@ -138,14 +138,14 @@ int vtkPCLSACSegmentationPlane::RequestData(
 {
   // get input and output data objects
   vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
-  vtkPolyData *input = vtkPolyData::SafeDownCast(inInfo->Get(vtkDataObject::DATA_OBJECT()));
+  vtkPointSet *input = vtkPointSet::SafeDownCast(inInfo->Get(vtkDataObject::DATA_OBJECT()));
   vtkInformation *outInfo = outputVector->GetInformationObject(0);
-  vtkPolyData *output = vtkPolyData::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
+  vtkPointSet *output = vtkPointSet::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
   // perform plane model fit
   pcl::PointIndices::Ptr inlierIndices;
   pcl::ModelCoefficients::Ptr modelCoefficients;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = vtkPCLConversions::PointCloudFromPolyData(input);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = vtkPCLConversions::PointSetToPointCloudXYZ(input);
 
   if (this->PerpendicularConstraintEnabled)
     {
