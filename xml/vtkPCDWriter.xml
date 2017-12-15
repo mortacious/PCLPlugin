@@ -5,6 +5,24 @@
                     short_help="Write pointcloud library (*.pcd) files."
                     long_help="Write pointcloud library (*.pcd) files.">
             </Documentation>
+            <InputProperty
+                    name="Input"
+                    port_index="0"
+                    command="SetInputConnection">
+                <ProxyGroupDomain name="groups">
+                    <Group name="sources"/>
+                    <Group name="filters"/>
+                </ProxyGroupDomain>
+                <DataTypeDomain name="input_type">
+                    <DataType value="vtkPointSet"/>
+                </DataTypeDomain>
+                <InputArrayDomain name="input_array" number_of_components="1">
+                </InputArrayDomain>
+                <Documentation>
+                    Set the input point set
+                </Documentation>
+            </InputProperty>
+
             <StringVectorProperty
                     name="FileName"
                     animateable="0"

@@ -1,0 +1,37 @@
+<ServerManagerConfiguration>
+    <ProxyGroup name="sources">
+        <SourceProxy name="PCLOpenNI2Source" class="vtkPCLOpenNI2Source" label="PCL OpenNI2 Source">
+            <Documentation
+                    short_help="OpenNI2 point cloud source"
+                    long_help="OpenNI2 point cloud source">
+            </Documentation>
+
+            <Property
+                    name="Poll"
+                    command="Poll"/>
+
+            <Property
+                    name="StartGrabber"
+                    command="StartGrabber"/>
+
+            <Property
+                    name="StopGrabber"
+                    command="StopGrabber"/>
+
+            <IntVectorProperty
+                    name="HasNewData"
+                    command="HasNewData"
+                    information_only="1">
+                <SimpleIntInformationHelper/>
+            </IntVectorProperty>
+            <PropertyGroup label="ControlProperties"
+                           panel_visibility="default"
+                           panel_widget="PCL_OPENNI2_Source_Widget">
+                <Property name="Poll"/>
+                <Property name="StartGrabber"/>
+                <Property name="StopGrabber"/>
+                <Property name="HasNewData"/>
+            </PropertyGroup>
+        </SourceProxy>
+    </ProxyGroup>
+</ServerManagerConfiguration>

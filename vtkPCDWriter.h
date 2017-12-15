@@ -5,15 +5,15 @@
 #ifndef PARAVIEW_PCLPLUGINS_VTKPCDWRITER_H
 #define PARAVIEW_PCLPLUGINS_VTKPCDWRITER_H
 
-#include <vtkPolyDataAlgorithm.h>
+#include <vtkWriter.h>
 #include <vtkPCLFiltersModule.h>
 #include <string>
 
-class VTKPCLFILTERS_EXPORT vtkPCDWriter : public vtkPolyDataAlgorithm
+class VTKPCLFILTERS_EXPORT vtkPCDWriter : public vtkWriter
 {
     public:
     static vtkPCDWriter* New();
-    vtkTypeMacro(vtkPCDWriter, vtkPolyDataAlgorithm);
+    vtkTypeMacro(vtkPCDWriter, vtkWriter);
     void PrintSelf(ostream& os, vtkIndent indent);
 
     vtkSetMacro(FileName, std::string);
@@ -25,12 +25,8 @@ class VTKPCLFILTERS_EXPORT vtkPCDWriter : public vtkPolyDataAlgorithm
     vtkPCDWriter();
     ~vtkPCDWriter();
 
-
-    //virtual int FillOutputPortInformation(int port, vtkInformation* info);
-
-    int RequestData(vtkInformation*        request,
-                    vtkInformationVector** inputVector,
-                    vtkInformationVector*  outputVector);
+    virtual int FillInputPortInformation(int port, vtkInformation* info) VTK_OVERRIDE;
+    virtual void WriteData() VTK_OVERRIDE;
 
 
     std::string FileName;

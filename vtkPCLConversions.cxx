@@ -151,9 +151,11 @@ vtkPCLConversions::PolyDataFromPCDFile(const std::string &filename, bool addCoor
 
 }
 
-void vtkPCLConversions::PolyDataToPCDFile(vtkPolyData *polyData, const std::string &filename, bool write_binary) {
+void vtkPCLConversions::PointSetToPCDFile(vtkPointSet *polyData, const std::string &filename, bool write_binary) {
     pcl::PCLPointCloud2ConstPtr cloud = PointSetToGenericPointCloud(polyData);
+    std::cout << "Saving to " << filename << std::endl;
     pcl::io::savePCDFile(filename, *cloud, Eigen::Vector4f::Zero(), Eigen::Quaternionf::Identity(), write_binary);
+    std::cout << "done" << std::endl;
 }
 
 
@@ -469,7 +471,7 @@ vtkSmartPointer<vtkPolyData> vtkPCLConversions::PolyDataFromPointCloudXYZRGB(
     points->SetNumberOfPoints(nr_points);
 
     vtkNew<vtkUnsignedCharArray> rgbArray;
-    rgbArray->SetName("rgb_colors");
+    rgbArray->SetName("rgb");
     rgbArray->SetNumberOfComponents(3);
     rgbArray->SetNumberOfTuples(nr_points);
 
@@ -518,7 +520,7 @@ vtkSmartPointer<vtkPolyData> vtkPCLConversions::PolyDataFromPointCloudXYZRGBA(
     points->SetNumberOfPoints(nr_points);
 
     vtkNew<vtkUnsignedCharArray> rgbArray;
-    rgbArray->SetName("rgb_colors");
+    rgbArray->SetName("rgba");
     rgbArray->SetNumberOfComponents(3);
     rgbArray->SetNumberOfTuples(nr_points);
 

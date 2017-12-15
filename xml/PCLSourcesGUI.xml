@@ -1,5 +1,5 @@
 <ParaViewSources>
   <Category name="PCL" menu_label="&amp;Point Cloud Library">
-    <Source name="PCLOpenNISource" />
+    <Source name="PCLOpenNI2Source" />
   </Category>
 </ParaViewSources>

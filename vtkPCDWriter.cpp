@@ -18,39 +18,39 @@
 vtkStandardNewMacro(vtkPCDWriter);
 
 //----------------------------------------------------------------------------
-vtkPCDWriter::vtkPCDWriter(): FileName(), WriteBinary(true)
-{
+vtkPCDWriter::vtkPCDWriter() : FileName(), WriteBinary(true) {
     this->SetNumberOfInputPorts(1);
     this->SetNumberOfOutputPorts(0);
+    std::cout << "Writer created" << std::endl;
 }
 
 //----------------------------------------------------------------------------
-vtkPCDWriter::~vtkPCDWriter()
-{
+vtkPCDWriter::~vtkPCDWriter() {
 }
 
 //----------------------------------------------------------------------------
-void vtkPCDWriter::PrintSelf(ostream& os, vtkIndent indent)
-{
-    this->Superclass::PrintSelf(os,indent);
+void vtkPCDWriter::PrintSelf(ostream &os, vtkIndent indent) {
+    this->Superclass::PrintSelf(os, indent);
 }
 
 //----------------------------------------------------------------------------
-int vtkPCDWriter::RequestData(
-        vtkInformation *vtkNotUsed(request),
-        vtkInformationVector **inputVector,
-        vtkInformationVector *outputVector)
-{
 
-    if (GetFileName().size() == 0)
-    {
+void vtkPCDWriter::WriteData() {
+    this->
+    std::cout << "writing" << std::endl;
+    vtkPointSet* input = vtkPointSet::SafeDownCast(this->GetInputDataObject(0,0));
+
+    if (GetFileName().size() == 0) {
         vtkErrorMacro("Filename is not set");
-        return 0;
+        FileName = "output.ply";
     }
-    vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
-    vtkPolyData *input = vtkPolyData::SafeDownCast(inInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-    vtkPCLConversions::PolyDataToPCDFile(input, FileName, WriteBinary);
+    vtkPCLConversions::PointSetToPCDFile(input, FileName, WriteBinary);
+}
 
+int vtkPCDWriter::FillInputPortInformation(int, vtkInformation* info)
+{
+    info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkPointSet");
     return 1;
 }
+

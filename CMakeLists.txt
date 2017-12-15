@@ -1,4 +1,4 @@
-project(Paraview_PCLPlugins)
+project(PCLPlugins)
 if (NOT ParaView_SOURCE_DIR)
     cmake_minimum_required(VERSION 3.0)
     set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
@@ -14,7 +14,6 @@ option(USE_EXTERNAL_PCL "Use external system wide PCL version")
 #set(ParaView_CMAKE_DIR /usr/lib/cmake/paraview-5.4)
 #set(PCL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/pcl/build)
 #endif()
-
 
 find_package(PCL REQUIRED)
 find_package(VTK REQUIRED)
@@ -33,21 +32,16 @@ set(gui_deps)
 set(servermanager_sources)
 set(servermanager_xml)
 set(server_deps)
+set(IFACES)
+set(IFACE_SRCS)
 
-# TODO: We really need to know if pcl was configured with openni
-# not just whether it was found
-option(USE_OPENNI "Build OpenNI features" OFF)
+QT5_WRAP_CPP(MOC_SRCS pqPCLOpenNI2SourceWidget.h)
 
-if (PARAVIEW_BUILD_QT_GUI AND USE_OPENNI)
-    QT5_WRAP_CPP(moc_srcs pqPCLOpenNISource.h)
-    ADD_PARAVIEW_OBJECT_PANEL(
-            ifaces iface_srcs
-            CLASS_NAME pqPCLOpenNISource
-            XML_NAME PCLOpenNISource
-            XML_GROUP sources)
-    list(APPEND gui_interfaces ${ifaces})
-    list(APPEND gui_sources ${iface_srcs} ${moc_srcs})
-endif ()
+
+add_paraview_property_group_widget(IFACES IFACE_SRCS
+        TYPE "PCL_OPENNI2_Source_Widget"
+        CLASS_NAME pqPCLOpenNI2SourceWidget)
+
 
 
 list(APPEND servermanager_sources
@@ -69,13 +63,15 @@ list(APPEND servermanager_sources
         vtkPCLSACSegmentationPlane.cxx
         vtkPCLVoxelGrid.h
         vtkPCLVoxelGrid.cxx
+        vtkPCLOpenNI2Source.h
+        vtkPCLOpenNI2Source.cxx
         )
-
-#if(USE_OPENNI)
-#list(APPEND servermanager_sources
-#  vtkPCLOpenNISource.cxx
-#  )
-#endif()
+#if (USE_OPENNI)
+#    list(APPEND servermanager_sources
+#            vtkPCLOpenNISource.h
+#            vtkPCLOpenNISource.cxx
+#            )
+#endif ()
 
 list(APPEND servermanager_xml
         xml/vtkAnnotateOBBs.xml
@@ -88,12 +84,13 @@ list(APPEND servermanager_xml
         xml/vtkPCLSACSegmentationPlane.xml
         xml/vtkPCLVoxelGrid.xml
         xml/vtkPCDWriter.xml
+        xml/vtkPCLOpenNI2Source.xml
         #xml/vtkThresholdPoints.xml
         )
 
 #if(USE_OPENNI)
 #list(APPEND servermanager_xml
-#  xml/vtkPCLOpenNISource.xml
+#
 #  )
 #endif()
 
@@ -103,7 +100,7 @@ list(APPEND servermanager_xml
 
 #if(USE_OPENNI)
 #list(APPEND gui_xml
-#  xml/PCLSourcesGUI.xml
+#
 #  )
 #endif()
 
@@ -116,9 +113,15 @@ set(library_name vtkPCLFilters)
 include(GenerateExportHeader)
 
 add_paraview_plugin(${library_name} "1.0"
+        REQUIRED_ON_SERVER
+        REQUIRED_ON_CLIENT
         SERVER_MANAGER_XML ${servermanager_xml}
         SERVER_MANAGER_SOURCES ${servermanager_sources}
+        GUI_INTERFACES ${IFACES}
+        SOURCES ${MOC_SRCS} ${IFACE_SRCS} pqPCLOpenNI2SourceWidget.h pqPCLOpenNI2SourceWidget.cpp
         )
+
+
 generate_export_header(${library_name} EXPORT_FILE_NAME ${library_name}Module.h)
 
 

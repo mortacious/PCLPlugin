@@ -21,15 +21,15 @@
 
 #include <vtkPolyDataAlgorithm.h>
 #include <vtkPCLFiltersModule.h>
+#include <memory>
 
-
-class VTKPCLFILTERS_EXPORT vtkPCLOpenNISource : public vtkPolyDataAlgorithm
+class VTKPCLFILTERS_EXPORT vtkPCLOpenNI2Source : public vtkPolyDataAlgorithm
 {
 public:
-  vtkTypeMacro(vtkPCLOpenNISource, vtkPolyDataAlgorithm);
+  vtkTypeMacro(vtkPCLOpenNI2Source, vtkPolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
-  static vtkPCLOpenNISource *New();
+  static vtkPCLOpenNI2Source *New();
 
   bool HasNewData();
 
@@ -44,15 +44,15 @@ protected:
                           vtkInformationVector **inputVector,
                           vtkInformationVector *outputVector);
 
-  vtkPCLOpenNISource();
-  virtual ~vtkPCLOpenNISource();
+  vtkPCLOpenNI2Source();
+  virtual ~vtkPCLOpenNI2Source();
 
 private:
-  vtkPCLOpenNISource(const vtkPCLOpenNISource&);  // Not implemented.
-  void operator=(const vtkPCLOpenNISource&);  // Not implemented.
+    vtkPCLOpenNI2Source(const vtkPCLOpenNI2Source&);  // Not implemented.
+  void operator=(const vtkPCLOpenNI2Source&);  // Not implemented.
 
   class vtkInternal;
-  vtkInternal * Internal;
+  std::unique_ptr<vtkInternal> Internal;
 };
 
 #endif

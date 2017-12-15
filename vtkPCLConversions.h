@@ -48,7 +48,7 @@ public:
 
     static vtkSmartPointer<vtkPolyData> PolyDataFromPCDFile(const std::string& filename, bool addCoordsToPointData=true);
 
-    static void PolyDataToPCDFile(vtkPolyData *polyData, const std::string &filename, bool write_binary);
+    static void PointSetToPCDFile(vtkPointSet *polyData, const std::string &filename, bool write_binary);
 
     static vtkSmartPointer<vtkPolyData> PolyDataFromPointCloudXYZ(
             pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud);
